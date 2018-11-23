@@ -5,7 +5,7 @@
 	<meta charset="UTF-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no">
-	<title>간단한 지도 표시하기</title>
+	<title>서울대 가즈아!</title>
 	<style type="text/css">
 		html,
 		body {
@@ -15,6 +15,7 @@
 	</style>
 	<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
 	<script type="text/javascript" src="https://openapi.map.naver.com/openapi/v3/maps.js?clientId=Xj1YuOML0crKk4oZPExn"></script>
+	<script type="text/javascript" src="./MarkerClustering.js"></script>
 </head>
 
 <body>
@@ -26,13 +27,78 @@
 			zoom: 10
 		});
 
+		var markers = [];
+
+		var htmlMarker1 = {
+			style: "circle",
+			radius: 5,
+			fillColor: "red",
+			fillOpacity: 1,
+			strokeColor: "black",
+			strokeStyle: "solid",
+			strokeWeight: 3
+		};
+
+		var htmlMarker2 = {
+			style: "circle",
+			radius: 5,
+			fillColor: "red",
+			fillOpacity: 1,
+			strokeColor: "black",
+			strokeStyle: "solid",
+			strokeWeight: 3
+		};
+		var htmlMarker3 = {
+			style: "circle",
+			radius: 5,
+			fillColor: "red",
+			fillOpacity: 1,
+			strokeColor: "black",
+			strokeStyle: "solid",
+			strokeWeight: 3
+		};
+		var htmlMarker4 = {
+			style: "circle",
+			radius: 5,
+			fillColor: "red",
+			fillOpacity: 1,
+			strokeColor: "black",
+			strokeStyle: "solid",
+			strokeWeight: 3
+		};
+		var htmlMarker5 = {
+			style: "circle",
+			radius: 5,
+			fillColor: "red",
+			fillOpacity: 1,
+			strokeColor: "black",
+			strokeStyle: "solid",
+			strokeWeight: 3
+		};
+
 		$.getJSON("https://raw.githubusercontent.com/myrodin/go_snu/master/rank.json", function (data) {
 			$.each(data, function (index, value) {
 				var marker = new naver.maps.Marker({
 					position: new naver.maps.LatLng(value.lat, value.lng),
 					map: map
 				});
+
+				markers.push(marker);
 			});
+		});
+
+		var markerClustering = new MarkerClustering({
+			minClusterSize: 2,
+			maxZoom: 8,
+			map: map,
+			markers: markers,
+			disableClickZoom: false,
+			gridSize: 120,
+			icons: [htmlMarker1, htmlMarker2, htmlMarker3, htmlMarker4, htmlMarker5],
+			indexGenerator: [10, 100, 200, 500, 1000],
+			stylingFunction: function (clusterMarker, count) {
+				$(clusterMarker.getElement()).find('div:first-child').text(count);
+			}
 		});
 	</script>
 </body>
